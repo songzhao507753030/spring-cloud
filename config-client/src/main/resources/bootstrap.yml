@@ -1,28 +1,31 @@
 server:
-  port: 6100
+  port: 4100
 #  servlet:
 #    context-path: /configClient
 spring:
   application:
-    name:  config-client
+    name: config-client   # 配置文件  config-client-dev.yml
   cloud:
     bus:
       enabled: true   # 开启Bus刷新
       trace:
         enabled: true      # Bus总占线属性跟踪 标志上的ack（缺省关闭）的跟踪切换
     config:
-      uri: http://songzhao:80/   # 配置config server 地址
-      name: song                #应用名
-      profile: test              #环境
-      #label: master                 #分支
+      uri: http://songzhao:4000/   # 配置config server 地址
+      profile: dev              #环境
   rabbitmq:
-    host: 127.0.0.1
+    host: 47.92.123.114
     port: 5672
-    username: songzhao
-    password: songzhao
+    username: admin
+    password: 123456
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"   #  bus刷新 需要用到这个
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false

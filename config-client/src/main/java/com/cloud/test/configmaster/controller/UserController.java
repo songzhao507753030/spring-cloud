@@ -20,9 +20,19 @@ public class UserController {
     @Value("${name}")
     private String name ;
     
-    @GetMapping("/user")
+    @Value("${email}")
+    private String email ;
+    
+    @GetMapping("/name")
     public String index(){
         return name;
     }
+    
+    @GetMapping("/email")
+    public String email(){
+        return email;
+    }
+    
+    
     
 }
