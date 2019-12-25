@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.cloud.test</groupId>
-    <artifactId>boot-admin-server</artifactId>
+    <artifactId>boot-admin-clent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>boot-admin-server</name>
+    <name>boot-admin-clent</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -27,7 +27,7 @@
         <!-- https://mvnrepository.com/artifact/de.codecentric/spring-boot-admin-starter-server -->
         <dependency>
             <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-server</artifactId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
             <version>2.2.0</version>
         </dependency>
 
