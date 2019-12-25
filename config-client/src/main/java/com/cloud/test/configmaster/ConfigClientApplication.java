@@ -6,11 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class ConfigMasterApplication {
-    
+public class ConfigClientApplication {
 
     public static void main(String[] args){
-        SpringApplication.run(ConfigMasterApplication.class,args);
+        SpringApplication.run(ConfigClientApplication.class,args);
     }
     
 }

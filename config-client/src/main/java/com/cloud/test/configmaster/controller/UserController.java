@@ -2,6 +2,7 @@ package com.cloud.test.configmaster.controller;
 
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Describe :
  */
 @RestController
+@RefreshScope  // 支持手动或自动刷新配置 。  需要暴露端点配置来实现刷新。 actuator/bus-refresh /  动态~~
 public class UserController {
     
     @Value("${name}")
@@ -32,7 +34,5 @@ public class UserController {
     public String email(){
         return email;
     }
-    
-    
     
 }
