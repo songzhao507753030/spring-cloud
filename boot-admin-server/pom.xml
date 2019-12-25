@@ -17,7 +17,6 @@
 
     <properties>
         <java.version>11</java.version>
-        <spring-boot-admin.version>2.2.1</spring-boot-admin.version>
     </properties>
 
     <dependencies>
@@ -25,9 +24,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/de.codecentric/spring-boot-admin-starter-server -->
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-server</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <dependency>
