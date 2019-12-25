@@ -12,7 +12,7 @@ eureka:
 #  instance:
 #    instance-id: ${spring.application.name}:${server.port}
 turbine:    #   instance_id 遵循规则。
-#  cluster-name-expression: "'default'"
+  #  cluster-name-expression: "'default'"
   cluster-name-expression: metadata['cluster']    #  客户端配置 metadata cluster 。
   aggregator:
     cluster-config: BASIC    # need provider statement
