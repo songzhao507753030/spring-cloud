@@ -1,0 +1,27 @@
+server:
+  port: 4000
+#  servlet:
+#    context-path: /configServer
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: http://192.168.1.88/sz/songtest.git
+          timeout: 10  # 以秒为单位
+          username: herogmaii@gmail.com
+          password: FastJson
+          search-paths: /config-repo  #搜索路径
+          #force-pull: true # 如果本地副本是脏的，它会使Spring Cloud Config Server强制从远程存储库中拉出，如下面的示例所示:
+          #default-label: master
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

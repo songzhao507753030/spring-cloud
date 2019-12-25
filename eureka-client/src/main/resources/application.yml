@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /eurekaClientMaster
+
+
+spring:
+  application:
+    name: eureka-client-master
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}    #  hystrix-dashboard

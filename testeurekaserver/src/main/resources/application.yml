@@ -1,0 +1,13 @@
+server:
+  port: 80
+  servlet:
+    context-path: /eurekaServerMaster
+spring:
+  application:
+    name: eureka-server-master
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+    register-with-eureka: false
+    fetch-registry: false

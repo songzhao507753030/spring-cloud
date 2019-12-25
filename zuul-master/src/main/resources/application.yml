@@ -1,0 +1,63 @@
+server:
+  #  context-path: /zuulMaster
+  port: 5000
+spring:
+  application:
+    name: zuul-master
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:songzhao:${server.port}
+zuul:  # 可以发现所有eureka上面的服务。
+  routes:   #配置路由映射
+    abc:  # 随便写必须保证是唯一的。
+      path: /abcd/**    #   Map the path    http://songzhao:5000/abcd/e
+      serviceId: feign-master   # Do mapping service
+
+
+#zuul  上传可以使用 /zuul/myservice/**  可以跳过DispatchServlet
+# 忽视路径    ignoredPatterns:  /**/admin/*
+#    bcd:
+#      path: /baidu/**
+#      serviceId: routings   # 负载均衡
+#routings:
+#  ribbon:
+#    listOfServers: https://ip:port/,https://ip:port/    # match url
+
+    #feign-master: /abc/** # 给指定的服务做映射   比如当前是给feign-master映射的地址为/abc  --  http://songzhao:5000/abc/q  --http://songzhao:5000/feign-master/q
+
+
+  #ignored-services: feign-master,feign-slave  # 不想代理的服务。如果有多个不需要代理的服务可以用","号分割
+
+
+#
+#ribbon:
+#  eureka:
+#    enabled: false
+#routing-url:
+#  ribbon:
+#    listOfServers: https://www.baidu.com/    #  负载均衡到指定的服务
+#
+#zuul:
+#  routes:
+#    baidu:
+#      path: /baidu/**
+#      #url: https://www.baidu.com/
+#      serviceId: routing-url
+#    feign-master:
+#      path: /feign-master/**
+#      serviceId: FEIGN-MASTER
+#      #url: https://www.baidu.com/
+#    feign-slave:
+#      path: /feign-slave/**
+#      serviceId: FEIGN-SLAVE
+#      #url: https://www.baidu.com/
+#  ignored-services: "*"
+#  #prefix:  统一访问前缀
+#  host:
+
+#    connect-timeout-millis: 200000

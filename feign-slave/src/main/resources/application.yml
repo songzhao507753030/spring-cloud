@@ -1,0 +1,39 @@
+server:
+  port: 9100
+#  servlet:
+#    context-path: /feignSlave
+spring:
+  application:
+    name: feign-slave
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}  # hystrix-dashboard
+    metadata-map:
+      cluster: BASIC
+feign:
+  hystrix:
+    enabled: true
+  httpclient:
+    connection-timeout: 180000
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+#  eureka:
+#    enabled: false
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 180000  #缺省为1000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

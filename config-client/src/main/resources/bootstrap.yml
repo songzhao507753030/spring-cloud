@@ -1,0 +1,28 @@
+server:
+  port: 6100
+#  servlet:
+#    context-path: /configClient
+spring:
+  application:
+    name:  config-client
+  cloud:
+    bus:
+      enabled: true   # 开启Bus刷新
+      trace:
+        enabled: true      # Bus总占线属性跟踪 标志上的ack（缺省关闭）的跟踪切换
+    config:
+      uri: http://songzhao:80/   # 配置config server 地址
+      name: song                #应用名
+      profile: test              #环境
+      #label: master                 #分支
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: songzhao
+    password: songzhao
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"   #  bus刷新 需要用到这个
