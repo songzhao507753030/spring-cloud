@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableFeignClients
 @SpringCloudApplication
 public class FeignSlaveApplication {
-
+    
     public static void main(String[] args){
         SpringApplication.run(FeignSlaveApplication.class,args);
     }

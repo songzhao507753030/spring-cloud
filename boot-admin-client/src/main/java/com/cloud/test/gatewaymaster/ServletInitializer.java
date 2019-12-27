@@ -1,4 +1,4 @@
-package com.cloud.test.feignslave;
+package com.cloud.test.gatewaymaster;
 
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -8,6 +8,6 @@ public class ServletInitializer extends SpringBootServletInitializer {
     
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
-        return application.sources(FeignSlaveApplication.class);
+        return application.sources(GatewayMasterApplication.class);
     }
 }

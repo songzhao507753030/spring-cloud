@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * Mail : herogmaiI@gmail.com
  * Describe :
  */
-@FeignClient(name = "EUREKA-CLIENT-MASTER",path = "/eurekaClientMaster/user",fallback = UserServiceFallback.class)
+@FeignClient(name = "EUREKA-CLIENT-MASTER", path = "/eurekaClientMaster/user", fallback = UserServiceFallback.class)
 public interface UserService {
     
     @GetMapping
