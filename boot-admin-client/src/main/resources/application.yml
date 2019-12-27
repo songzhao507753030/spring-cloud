@@ -1,1 +1,25 @@
+server:
+  port: 3200
 
+spring:
+  application:
+    name: boot-admin-clinet
+  boot:
+    admin:
+      client:
+        url: http://songzhao:3000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://songzhao/eurekaServerMaster/eureka/

@@ -1,1 +1,47 @@
+server:
+  port: 3000
 
+spring:
+  application:
+    name: boot-admin-server
+  boot:
+    admin:
+      notify:
+        mail:
+          from: 507753030@qq.com   # 该邮件来自谁
+          to: songzhao507753030@163.com,507753030@qq.com # 该邮件发给谁
+        discord:
+          enabled: true
+  mail:  # 事先准备一个邮件     # 推荐使用163 邮件。   qq 授权码gaixznapqnyrbgib
+    host: smtp.qq.com  # smtp 服务器
+    port: 465  # 发送端口
+    username: 507753030@qq.com  # 邮件地址
+    password: xsshaadzcpjtcabh  # pop3 开启验证码
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+#          socketFactory:
+#            class: javax.net.ssl.SSLSocketFactory
+          auth: true   # 开启用户身份验证
+          starttls:
+            enable: true  # STARTTLS：一种通信协议，具体可以搜索下
+            required: true   # 配好尝试发一下。
+
+#spring.mail.properties.mail.smtp.starttls.required=true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+    registry-fetch-interval-seconds: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
