@@ -1,6 +1,7 @@
 server:
   port: 2000
 spring:
+
 #  devtools:
 #    restart:
 #      enabled: true   #开启热部署
@@ -12,30 +13,87 @@ spring:
     database: 1
   cloud:
     gateway:
-      #discovery:   因为使用了lb:// 所以需要关闭名称转发。不要冲突后果lb://路径失效。
-        #locator:
-          #enabled: true  # 开启微服 根据名称来转发。  注意是注册中心的服务的名称（大写） 例如: http://songzhao:2000/FEIGN-MASTER/
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 5s
+      enabled: true  # 是否开启 gateway
+#      discovery:   #因为使用了lb:// 所以需要关闭名称转发。不要冲突后果lb://路径失效。
+#        locator:
+#          enabled: true  # 开启微服 根据名称来转发。  注意是注册中心的服务的名称（大写） 例如: http://songzhao:2000/FEIGN-MASTER/
+
+#
+#      routes:
+#        # SockJS route
+#        - id: websocket_sockjs_route
+#          uri: http://localhost:3001
+#          predicates:
+#            - Path=/websocket/info/**
+#        # Normal Websocket route
+#        - id: websocket_route
+#          uri: ws://localhost:3001
+#          predicates:
+#            - Path=/websocket/**
+#        - id: setstatus_route
+#          uri: https://example.org
+#          filters:
+#            - name: SetStatus
+#              args:
+#                status: 401
       routes:
         - id: user # 服务名(保证该不重复可以随便写)。
           #uri: http://songzhao:9000/,http://songzhao:9100/   # 绑定访问的路径、实现负载均衡
           uri: lb://FEIGN-MASTER   # 绑定服务名实现负载均衡
           predicates:
-            - Path= /providercenter/** #  路径访问。
+            # - After=2017-01-20T17:42:47.789-07:00[America/Denver]   这条路线符合2017年1月20日17:42山区时间（丹佛）之后的任何请求。
+            # - Before=2017-01-20T17:42:47.789-07:00[America/Denver]   这条路线符合2017年1月20日17:42山区时间（丹佛）之前的任何要求。
+            # - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]  之间的请求。
+            # - Header=X-Request-Id, \d+  如果请求的头名为X-Request-Id，其值与\d+正则表达式匹配(即，它的值为一个或多个数字)，则此路由将进行匹配。
+            # - Cookie=chocolate, ch.p  此路由匹配具有一个名为chocolate的cookie的请求，该cookie的值与ch.p正则表达式匹配。
+            # - Method=GET,POST   如果请求方法是GET或POST，则此路由匹配。
+            # - Query=green   如果请求包含green查询参数，则前面的路由匹配。
+            # - RemoteAddr=192.168.1.1/24    如果请求的远程地址是192.168.1.10，则此路由匹配。
+            #
+            - Path= /providercenter/**   # 路线访问。
           filters:    # 对上面请求的服务实现拦截 id  url predicates
+            # - PrefixPath=/mypath 给所有的路径加前缀。
+            # - AddRequestParameter=red,blue  这将为所有匹配的请求在下游请求的查询字符串中添加red=blue。
             - RewritePath=/providercenter/(?<segment>.*),/$\{segment}   #拦截前缀。
-            - name: RequestRateLimiter
+            - name: RequestRateLimiter    # 限流名称
               args:
                 key-resolver: '#{@uriKeyResolver}'    # redis实现需要key - value
                 redis-rate-limiter.replenishRate: 1   # 一秒钟往桶里加一个令牌
                 redis-rate-limiter.burstCapacity: 2   # 最大的令牌数是2    需要定义规则怎么去拿令牌。 启动类中->
+                maxSize: 5000000   # 请求大小大于允许的限制。请求大小为6.0 MB，允许的限制为5.0 MB
+#          metadata:  # 配置超时
+#            response-timeout: 200  # 必须以毫秒为单位指定连接超时。
+#            connect-timeout: 200  # 响应超时必须以毫秒为单位指定。
+#      default-filters:    # 可以选择代码编译。也可选择配置   降级和限流只可取其一。
+#        - name: Hystrix
+#          args:
+#            name: fallbackcmd
+#            fallbackUri: forward:/fallbackcontroller
 
-
-
-
+#          filters:
+#            - name: Retry
+#              args:
+#                retries: 3   应该尝试的重试次数。
+#                statuses: BAD_GATEWAY  应该重试的HTTP状态码，用org.springframework.http.HttpStatus表示
+#                backoff:
+#                  firstBackoff: 10ms
+#                  maxBackoff: 50ms
+#                  factor: 2
+#                  basedOnPreviousValue: false
 logging:
   file:
     path: C:\Users\songzhao\Desktop\gateway
 
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
 
 eureka:
   client:
