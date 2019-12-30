@@ -1,1 +1,49 @@
+server:
+  port: 2000
+spring:
+#  devtools:
+#    restart:
+#      enabled: true   #开启热部署
+  application:
+    name: gateway
+  redis:
+    host: 47.92.123.114
+    port: 9736
+    database: 1
+  cloud:
+    gateway:
+      #discovery:   因为使用了lb:// 所以需要关闭名称转发。不要冲突后果lb://路径失效。
+        #locator:
+          #enabled: true  # 开启微服 根据名称来转发。  注意是注册中心的服务的名称（大写） 例如: http://songzhao:2000/FEIGN-MASTER/
+      routes:
+        - id: user # 服务名(保证该不重复可以随便写)。
+          #uri: http://songzhao:9000/,http://songzhao:9100/   # 绑定访问的路径、实现负载均衡
+          uri: lb://FEIGN-MASTER   # 绑定服务名实现负载均衡
+          predicates:
+            - Path= /providercenter/** #  路径访问。
+          filters:    # 对上面请求的服务实现拦截 id  url predicates
+            - RewritePath=/providercenter/(?<segment>.*),/$\{segment}   #拦截前缀。
+            - name: RequestRateLimiter
+              args:
+                key-resolver: '#{@uriKeyResolver}'    # redis实现需要key - value
+                redis-rate-limiter.replenishRate: 1   # 一秒钟往桶里加一个令牌
+                redis-rate-limiter.burstCapacity: 2   # 最大的令牌数是2    需要定义规则怎么去拿令牌。 启动类中->
 
+
+
+
+logging:
+  file:
+    path: C:\Users\songzhao\Desktop\gateway
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}  # hystrix-dashboard
+    #home-page-url-path: /feignMaster
+    metadata-map:
+      cluster: BASIC  # hystrix-dashboard

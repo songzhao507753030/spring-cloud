@@ -24,6 +24,7 @@ public class UserController {
     
     @GetMapping
     public String index(){
+        System.out.println("-----master-----");
         return userService.index();
     }
     

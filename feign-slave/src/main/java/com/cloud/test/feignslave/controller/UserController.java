@@ -22,6 +22,7 @@ public class UserController {
     
     @GetMapping
     public String index(){
+        System.out.println("----slave----");
         return userService.index();
     }
     

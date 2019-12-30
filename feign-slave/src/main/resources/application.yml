@@ -4,7 +4,8 @@ server:
 #    context-path: /feignSlave
 spring:
   application:
-    name: feign-slave
+    #name: feign-slave
+    name: feign-master
 
 eureka:
   client:
