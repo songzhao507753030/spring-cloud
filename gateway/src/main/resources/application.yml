@@ -1,10 +1,6 @@
 server:
   port: 2000
 spring:
-
-#  devtools:
-#    restart:
-#      enabled: true   #开启热部署
   application:
     name: gateway
   redis:
@@ -17,11 +13,6 @@ spring:
         connect-timeout: 1000
         response-timeout: 5s
       enabled: true  # 是否开启 gateway
-#      discovery:   #因为使用了lb:// 所以需要关闭名称转发。不要冲突后果lb://路径失效。
-#        locator:
-#          enabled: true  # 开启微服 根据名称来转发。  注意是注册中心的服务的名称（大写） 例如: http://songzhao:2000/FEIGN-MASTER/
-
-#
 #      routes:
 #        # SockJS route
 #        - id: websocket_sockjs_route
@@ -53,25 +44,24 @@ spring:
             # - Query=green   如果请求包含green查询参数，则前面的路由匹配。
             # - RemoteAddr=192.168.1.1/24    如果请求的远程地址是192.168.1.10，则此路由匹配。
             #
-            - Path= /providercenter/**   # 路线访问。
+            - Path= /providercenter/**   # 前缀访问。
           filters:    # 对上面请求的服务实现拦截 id  url predicates
-            # - PrefixPath=/mypath 给所有的路径加前缀。
+            # - PrefixPath=/mypath 给所有的路径新增前缀。
             # - AddRequestParameter=red,blue  这将为所有匹配的请求在下游请求的查询字符串中添加red=blue。
-            - RewritePath=/providercenter/(?<segment>.*),/$\{segment}   #拦截前缀。
+            - RewritePath=/providercenter/(?<segment>.*),/$\{segment}   # 重写路径。
             - name: RequestRateLimiter    # 限流名称
               args:
                 key-resolver: '#{@uriKeyResolver}'    # redis实现需要key - value
-                redis-rate-limiter.replenishRate: 1   # 一秒钟往桶里加一个令牌
-                redis-rate-limiter.burstCapacity: 2   # 最大的令牌数是2    需要定义规则怎么去拿令牌。 启动类中->
+                redis-rate-limiter.replenishRate: 1   # 一秒往桶里加一个令牌
+                redis-rate-limiter.burstCapacity: 2   # 最大的令牌数是2    需要定义规则怎么去拿令牌。 启动类中 ->
                 maxSize: 5000000   # 请求大小大于允许的限制。请求大小为6.0 MB，允许的限制为5.0 MB
-#          metadata:  # 配置超时
-#            response-timeout: 200  # 必须以毫秒为单位指定连接超时。
-#            connect-timeout: 200  # 响应超时必须以毫秒为单位指定。
 #      default-filters:    # 可以选择代码编译。也可选择配置   降级和限流只可取其一。
 #        - name: Hystrix
 #          args:
 #            name: fallbackcmd
 #            fallbackUri: forward:/fallbackcontroller
+
+
 
 #          filters:
 #            - name: Retry
@@ -85,7 +75,7 @@ spring:
 #                  basedOnPreviousValue: false
 logging:
   file:
-    path: C:\Users\songzhao\Desktop\gateway
+    path:
 
 hystrix:
   command:
@@ -93,15 +83,16 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 5000
+            timeoutInMilliseconds: 5000   #熔断超时时间。
 
 eureka:
   client:
     service-url:
       defaultZone: http://songzhao/eurekaServerMaster/eureka/
+
   instance:
     prefer-ip-address: true
-    instance-id: ${spring.application.name}:${server.port}  # hystrix-dashboard
+    instance-id: ${spring.application.name}:${server.port}
     #home-page-url-path: /feignMaster
     metadata-map:
       cluster: BASIC  # hystrix-dashboard

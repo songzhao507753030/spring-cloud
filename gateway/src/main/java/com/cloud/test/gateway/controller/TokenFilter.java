@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
  * Tool :  Intellij IDEA
  * Author : Song
  * Mail : herogmaiI@gmail.com
- * Describe :
+ * Describe :  自定义过滤器
  */
 public class TokenFilter implements GlobalFilter, Ordered {
     

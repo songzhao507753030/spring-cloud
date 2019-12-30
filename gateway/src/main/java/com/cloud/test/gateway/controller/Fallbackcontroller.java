@@ -13,7 +13,7 @@ import java.util.Map;
  * Tool :  Intellij IDEA
  * Author : Song
  * Mail : herogmaiI@gmail.com
- * Describe :
+ * Describe :   降级
  */
 @RestController
 public class Fallbackcontroller {
