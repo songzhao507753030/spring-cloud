@@ -27,12 +27,12 @@ public class TokenFilter implements GlobalFilter, Ordered {
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange,GatewayFilterChain chain){
-        var token = exchange.getRequest().getQueryParams().getFirst("token");
-        if(token == null || token.isEmpty()){
-            exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-            System.out.println("token is null！");
-            return exchange.getResponse().setComplete();
-        }
+        // var token = exchange.getRequest().getQueryParams().getFirst("token");
+        // if(token == null || token.isEmpty()){
+        //     exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+        //     System.out.println("token is null！");
+        //     return exchange.getResponse().setComplete();
+        // }
         System.out.println("---- 过滤链 -----");
         return chain.filter(exchange);
     }

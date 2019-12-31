@@ -10,8 +10,10 @@ spring:
 
 eureka:
   client:
+    refresh:
+      enable: false  # 禁止客户端刷新.因为刷新同时客户端会取消注册,短暂失联。
     service-url:
-      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+      defaultZone: http://user:user@songzhao/eurekaServerMaster/eureka/
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}    #  hystrix-dashboard

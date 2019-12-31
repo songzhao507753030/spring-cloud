@@ -5,9 +5,15 @@ server:
 spring:
   application:
     name: eureka-server-master
+  security:
+    user:
+      name: user
+      password: user
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+      defaultZone: http://user:user@songzhao/eurekaServerMaster/eureka/
     register-with-eureka: false
     fetch-registry: false
+  server:
+    enable-self-preservation: true  #false:  测试时关闭自我保护机制，保证不可用服务及时踢出

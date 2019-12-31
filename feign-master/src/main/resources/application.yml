@@ -1,42 +1,63 @@
 server:
   port: 9000
-#  servlet:
-#    context-path: /feignMaster
+  servlet:
+    context-path: /feignMaster
 spring:
   application:
     name: feign-master
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false  #由于Ribbon负载均衡器现在处于维护模式，我们建议改用Spring Cloud LoadBalancer，它也包含在Eureka启动器中。
 eureka:
   client:
     service-url:
-      defaultZone: http://songzhao/eurekaServerMaster/eureka/
+      defaultZone: http://user:user@songzhao/eurekaServerMaster/eureka/
+    refresh:
+      enable: false  # 禁止客户端刷新.因为刷新同时客户端会取消注册,短暂失联。
+    healthcheck:
+      enabled: true   # 开启健康检查端点。
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: true   # ip 注册
     instance-id: ${spring.application.name}:${server.port}  # hystrix-dashboard
-    #home-page-url-path: /feignMaster
+    home-page-url-path: /feignMaster
     metadata-map:
       cluster: BASIC  # hystrix-dashboard
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 15
+
+#      如果你的应用想通过HTTPS连接，你可以在EurekaInstanceConfig中设置两个标志
+#    non-secure-port-enabled: true
+#    secure-port-enabled: true
+#
+#      如果是https连接同时设置端点则需要重新配置端点。
+#    statusPageUrl: https://${eureka.hostname}/info
+#    healthCheckUrl: https://${eureka.hostname}/health
+#    homePageUrl: https://${eureka.hostname}/
 feign:
   hystrix:
     enabled: true
   httpclient:
     connection-timeout: 180000
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
 
-hystrix:
-  command:
-    default:
-      execution:
-        timeout:
-          enabled: true
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000
-ribbon:
-  ReadTimeout: 60000
-  ConnectTimeout: 60000
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        timeout:
+#          enabled: true
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 30000  # 超时时间最可能是ribbon重试机制的累加时间
+
+#ribbon:
+#  ReadTimeout: 6000
+#  ConnectTimeout: 6000
 #  MaxAutoRetries: 0
 #  MaxAutoRetriesNextServer: 1
