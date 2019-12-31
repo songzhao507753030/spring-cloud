@@ -9,18 +9,17 @@ eureka:
   client:
     service-url:
       defaultZone: http://user:user@songzhao/eurekaServerMaster/eureka/
-    healthcheck:
-      enabled: true
-#  instance:
-#    instance-id: ${spring.application.name}:${server.port}
-turbine:    #   instance_id 遵循规则。
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+
+
+turbine:
   #  cluster-name-expression: "'default'"
   cluster-name-expression: metadata['cluster']    #  客户端配置 metadata cluster 。
   aggregator:
-    cluster-config: BASIC    # need provider statement
+    cluster-config: BASIC,BASICT    # need provider statement
   app-config: feign-master,feign-slave
-  instanceUrlSuffix: /actuator/hystrix.stream
-#  instanceUrlSuffix:     #  Specify service suffixes
-#    feign-master: feignMaster/actuator/hystrix.stream
-#    feign-slave: feignSlave/actuator/hystrix.stream
+  instanceUrlSuffix:
+    BASIC: feignMaster/actuator/hystrix.stream
+    BASICT: feignSlave/actuator/hystrix.stream
 

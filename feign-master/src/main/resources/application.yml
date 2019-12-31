@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 9100
   servlet:
     context-path: /feignMaster
 spring:
@@ -20,7 +20,6 @@ eureka:
   instance:
     prefer-ip-address: true   # ip 注册
     instance-id: ${spring.application.name}:${server.port}  # hystrix-dashboard
-    home-page-url-path: /feignMaster
     metadata-map:
       cluster: BASIC  # hystrix-dashboard
     lease-expiration-duration-in-seconds: 30
@@ -46,15 +45,15 @@ management:
       exposure:
         include: "*"
 
-#hystrix:
-#  command:
-#    default:
-#      execution:
-#        timeout:
-#          enabled: true
-#        isolation:
-#          thread:
-#            timeoutInMilliseconds: 30000  # 超时时间最可能是ribbon重试机制的累加时间
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000  # 超时时间最可能是ribbon重试机制的累加时间
 
 #ribbon:
 #  ReadTimeout: 6000
