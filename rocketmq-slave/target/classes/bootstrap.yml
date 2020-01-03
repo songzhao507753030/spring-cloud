@@ -4,6 +4,7 @@ server:
     context-path: /rocket
 
 
+
 spring:
   application:
     name: rocket-master
@@ -96,7 +97,3 @@ hystrix:
 logging:
   file:
     path: F:/Logs/cloud-rocketmq
-rocketmq:
-  producer:
-    group: producer_bank
-  name-server: 47.92.123.114:9876
