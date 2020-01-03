@@ -60,7 +60,11 @@ management:
     web:
       exposure:
         include: "*"
-
+feign:
+  hystrix:
+    enabled: true
+  httpclient:
+    connection-timeout: 180000
 hystrix:
   command:
     default:

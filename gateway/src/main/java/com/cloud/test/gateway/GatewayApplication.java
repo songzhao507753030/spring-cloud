@@ -33,17 +33,17 @@ public class GatewayApplication {
                                                       .rewritePath("/providercenter/(?<segment>.*)","//$\\{segment}"))
                                                       .uri("lb://FEIGN-MASTER")).build();
     }
-    
+     // 代码的优先级要比配置文件的优先级别高
     //  降级
-    @Bean
-    public RouteLocator rocketRoutes(RouteLocatorBuilder builder){
-        return builder.routes()
-                      .route("rocketmq-master",r -> r.path("/rocket/**")
-                                          .filters(f -> f.circuitBreaker(c -> c.setName("myCircuitBreaker")
-                                                                               .setFallbackUri("forward:/fallbackcontroller"))
-                                                         .rewritePath("/rocket/(?<segment>.*)","//$\\{segment}"))
-                                          .uri("lb://ROCKETMQ-MASTER")).build();
-    }
+    // @Bean
+    // public RouteLocator rocketRoutes(RouteLocatorBuilder builder){
+    //     return builder.routes()
+    //                   .route("rocket-master",r -> r.path("/rocket/**")
+    //                                       .filters(f -> f.circuitBreaker(c -> c.setName("myCircuitBreaker")
+    //                                                                            .setFallbackUri("forward:/fallbackcontroller"))
+    //                                                      .rewritePath("/rocket/(?<segment>.*)","//$\\{segment}"))
+    //                                       .uri("lb://ROCKET-MASTER")).build();
+    // }
     
     
     @Bean

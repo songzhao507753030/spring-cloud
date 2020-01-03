@@ -10,7 +10,7 @@ spring:
         mail:
           from: 507753030@qq.com   # 该邮件来自谁
           #to: songzhao507753030@163.com,507753030@qq.com # 该邮件发给谁
-          to: 507753030@qq.com # 该邮件发给谁
+          #to: 507753030@qq.com # 该邮件发给谁
         discord:
           enabled: true
   mail:  # 事先准备一个邮件     # 推荐使用163 邮件。   qq 授权码gaixznapqnyrbgib

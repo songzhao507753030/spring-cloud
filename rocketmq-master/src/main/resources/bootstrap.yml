@@ -1,35 +1,17 @@
 server:
-  port: 11111
+  port: 11112
   servlet:
     context-path: /rocket
+
+
+
 spring:
   application:
     name: rocket-master
-  boot:
-    admin:
-      client:
-         url: http://songzhao:3000  # springboot-admin 服务地址
-  cloud:
-    loadbalancer:
-      ribbon:
-        enabled: false  #由于Ribbon负载均衡器现在处于维护模式，我们建议改用Spring Cloud LoadBalancer，它也包含在Eureka启动器中。
-    bus:
-      enabled: true   # 开启Bus刷新
-      trace:
-        enabled: true      # Bus总占线属性跟踪 标志上的ack（缺省关闭）的跟踪切换
-    config:
-      uri: http://songzhao:4000/   # 配置config server 地址
-      profile: pre              #环境
-  rabbitmq:
-    host: 47.92.123.114
-    port: 5672
-    username: admin
-    password: 123456
-
   datasource:
-    url: jdbc:mysql://localhost:3306/master?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
-    password:
+    password: ''
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       minimum-idle: 10
@@ -42,6 +24,32 @@ spring:
       data-source-properties:
         prepStmtCacheSize: 250
       leak-detection-threshold: 60000
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false  #由于Ribbon负载均衡器现在处于维护模式，我们建议改用Spring Cloud LoadBalancer，它也包含在Eureka启动器中。
+    bus:
+      enabled: true   # 开启Bus刷新
+      trace:
+        enabled: true      # Bus总占线属性跟踪 标志上的ack（缺省关闭）的跟踪切换
+    config:
+      uri: http://songzhao:4000/   # 配置config server 地址
+      profile: dev             #环境
+  rabbitmq:    # 通过mq通知各个客户端重新拉去服务端的配置信息。
+    host: 47.92.123.114
+    port: 5672
+    username: admin
+    password: 123456
+
+#      如果你的应用想通过HTTPS连接，你可以在EurekaInstanceConfig中设置两个标志
+#    non-secure-port-enabled: true
+#    secure-port-enabled: true
+#
+#      如果是https连接同时设置端点则需要重新配置端点。
+#    statusPageUrl: https://${eureka.hostname}/info
+#    healthCheckUrl: https://${eureka.hostname}/health
+#    homePageUrl: https://${eureka.hostname}/
+
 eureka:
   client:
     service-url:
@@ -54,24 +62,14 @@ eureka:
     prefer-ip-address: true   # ip 注册
     instance-id: ${spring.application.name}:${server.port}  # hystrix-dashboard
     metadata-map:
-      cluster: BASIC  # hystrix-dashboard
+      cluster: BASIC  #  turbine expression.
     lease-expiration-duration-in-seconds: 30
     lease-renewal-interval-in-seconds: 15
-
-#      如果你的应用想通过HTTPS连接，你可以在EurekaInstanceConfig中设置两个标志
-#    non-secure-port-enabled: true
-#    secure-port-enabled: true
-#
-#      如果是https连接同时设置端点则需要重新配置端点。
-#    statusPageUrl: https://${eureka.hostname}/info
-#    healthCheckUrl: https://${eureka.hostname}/health
-#    homePageUrl: https://${eureka.hostname}/
 feign:
   hystrix:
     enabled: true
   httpclient:
     connection-timeout: 180000
-
 management:
   endpoints:
     web:
@@ -80,6 +78,7 @@ management:
   endpoint:
     health:
       show-details: always   # 健康监测
+      enabled: true
 hystrix:
   command:
     default:
@@ -95,3 +94,6 @@ hystrix:
 #  ConnectTimeout: 6000
 #  MaxAutoRetries: 0
 #  MaxAutoRetriesNextServer: 1
+logging:
+  file:
+    path: F:/Logs/cloud-rocketmq

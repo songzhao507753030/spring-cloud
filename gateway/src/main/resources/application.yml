@@ -31,8 +31,8 @@ spring:
 #              args:
 #                status: 401
       routes:
-        - id: rocketmq-master
-          url: lb://ROCKETMQ-MASTER
+        - id: rocket-master
+          uri: lb://ROCKET-MASTER
           predicates:
             - Path= /rocket/**
           filters:
@@ -69,11 +69,11 @@ spring:
                 redis-rate-limiter.replenishRate: 1   # 一秒往桶里加一个令牌
                 redis-rate-limiter.burstCapacity: 2   # 最大的令牌数是2    需要定义规则怎么去拿令牌。 启动类中 ->
                 maxSize: 5000000   # 请求大小大于允许的限制。请求大小为6.0 MB，允许的限制为5.0 MB
-      default-filters:    # 可以选择代码编译。也可选择配置   降级和限流只可取其一。
-        - name: Hystrix
-          args:
-            name: fallbackcmd
-            fallbackUri: forward:/fallbackcontroller
+#      default-filters:    # 可以选择代码编译。也可选择配置   降级和限流只可取其一。
+#        - name: Hystrix
+#          args:
+#            name: fallbackcmd
+#            fallbackUri: forward:/fallbackcontroller
 
 
 
@@ -102,11 +102,7 @@ hystrix:
 eureka:
   client:
     service-url:
-      defaultZone: http://songzhao/eurekaServerMaster/eureka/
-
+      defaultZone: http://user:user@songzhao/eureka/
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
-    #home-page-url-path: /feignMaster
-    metadata-map:
-      cluster: BASIC  # hystrix-dashboard
