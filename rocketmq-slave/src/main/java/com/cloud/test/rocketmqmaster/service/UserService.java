@@ -14,12 +14,7 @@ import java.util.Map;
  */
 public interface UserService {
     
-    List<Map<String, Object>> findUsers();
-    
-    //向mq发送转账消息
-    public void sendUpdateAccountBalace(AccountChangeEvent accountChangeEvent);
-    
-    //更新账户金额。
-    public void doUpdateAccountBalance(AccountChangeEvent accountChangeEvent);
+    // 更新账户、增加金额
+    public void addAccountInfoBalance(AccountChangeEvent accountChangeEvent);
     
 }

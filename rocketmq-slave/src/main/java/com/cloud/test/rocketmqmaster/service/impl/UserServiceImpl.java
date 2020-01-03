@@ -30,45 +30,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper  userMapper;
     
-    @Autowired
-    private RocketMQTemplate rocketMQTemplate;
-
-    @Override
-    public List<Map<String, Object>> findUsers(){
-        return userMapper.selectUsers();
-    }
-    
-    // mq 发送转账消息
-    @Override
-    public void sendUpdateAccountBalace(AccountChangeEvent account){
-        
-        // 将accountChangeEvent转成JSON
-        var  json = new JSONObject();
-        json.put("accountChange",account);
-        var jsonObject = json.toJSONString();
-        //主 message类型
-        var build = MessageBuilder.withPayload(jsonObject).build();
-        //发送一条事务信息
-        /**
-         * String txProducerGroup,  生产组
-         * String destination topic,
-         * Message<?> message, 消息内容
-         * Object arg 参数
-         */
-        rocketMQTemplate.sendMessageInTransaction("producer_group_txmsg_bank1","topic_txmsg",build,null );
-    }
-    
-    // 更新账户，扣减金额
+    //增加金额。
     @Override
     @Transactional
-    public void doUpdateAccountBalance(AccountChangeEvent account){
-        // 幂等判断
-        if(userMapper.isExistTx(account.getTxNo() )> 0  ){
+    public void addAccountInfoBalance(AccountChangeEvent account){
+        log.info("bank2更新本地账号，账号 :{},金额 :{}",account.getAccountNo(),account.getAmount());
+        if(userMapper.isExistTx(account.getTxNo()) > 0 ){
             return;
         }
-        //扣减金额
-        userMapper.updateAccountBalance(account.getAccountNo(),account.getAccountNo() * -1);
-        //添加事务日志
-        account.addTx(account.getTxNo());
+        // 增加金额 。 这个方法可会被重复调用
+        userMapper.updateAccountBalance(account.getAccountNo(),account.getAmount());
+        //添加事务记录，用户幂等
+        userMapper.addTx(account.getTxNo());
+        
     }
 }

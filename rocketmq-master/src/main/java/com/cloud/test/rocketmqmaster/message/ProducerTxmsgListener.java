@@ -57,7 +57,20 @@ public class ProducerTxmsgListener implements RocketMQLocalTransactionListener {
     // 事务状态回查，查询是否扣减金额
     @Override
     public RocketMQLocalTransactionState checkLocalTransaction(Message message){
-        userMapper.isExistTx();
-        return null;
+        // 解析message，然后转成AccountChangeEvent对象
+        var payload = message.getPayload();
+        var messageString = new String((byte[])payload);
+        var jsonObject = JSONObject.parseObject(messageString);
+        var accountChange = jsonObject.getString("accountChange");
+        // json格式字符串转对象
+        var accountChangeEvent = JSONObject.parseObject(accountChange,AccountChangeEvent.class);
+        var txNo = accountChangeEvent.getTxNo();
+        int existTx = userMapper.isExistTx(txNo);
+        if(existTx > 0 ){
+            return  RocketMQLocalTransactionState.COMMIT;
+        }else{
+            // 状态不确定
+            return  RocketMQLocalTransactionState.UNKNOWN;
+        }
     }
 }
