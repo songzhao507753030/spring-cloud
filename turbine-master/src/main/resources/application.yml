@@ -5,21 +5,38 @@ server:
 spring:
   application:
     name: turbine-master
-eureka:
-  client:
-    service-url:
-      defaultZone: http://user:user@songzhao/eurekaServerMaster/eureka/
-  instance:
-    instance-id: ${spring.application.name}:${server.port}
-
-
+  boot:
+    admin:
+      client:
+        url: http://songzhao:3000  # springboot-admin 服务地址
 turbine:
   #  cluster-name-expression: "'default'"
   cluster-name-expression: metadata['cluster']    #  客户端配置 metadata cluster 。
   aggregator:
-    cluster-config: BASIC,BASICT    # need provider statement
-  app-config: feign-master,feign-slave
+    cluster-config: BASIC    # need provider statement
+  app-config: rocket-master
   instanceUrlSuffix:
-    BASIC: feignMaster/actuator/hystrix.stream
-    BASICT: feignSlave/actuator/hystrix.stream
+    BASIC: rocket/actuator/hystrix.stream
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://user:user@songzhao/eureka/
+    refresh:
+      enable: false  # 禁止客户端刷新.因为刷新同时客户端会取消注册,短暂失联。
+    healthcheck:
+      enabled: true   # 开启健康检查端点。
+  instance:
+    prefer-ip-address: true   # ip 注册
+    instance-id: ${spring.application.name}:${server.port}  # hystrix-dashboard
+#    metadata-map:
+#      cluster: BASIC  # hystrix-dashboard
+#    lease-expiration-duration-in-seconds: 30
+#    lease-renewal-interval-in-seconds: 15
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

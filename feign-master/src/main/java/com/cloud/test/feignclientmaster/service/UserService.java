@@ -21,4 +21,5 @@ public interface UserService {
     
     @GetMapping("/{id}")
     String index(@PathVariable String id);
+    
 }

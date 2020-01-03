@@ -18,8 +18,20 @@ spring:
           #default-label: master
 eureka:
   client:
-    fetch-registry: false
-    register-with-eureka: false
+    service-url:
+      defaultZone: http://user:user@songzhao/eureka/
+    refresh:
+      enable: false  # 禁止客户端刷新.因为刷新同时客户端会取消注册,短暂失联。
+    healthcheck:
+      enabled: true   # 开启健康检查端点。
+  instance:
+    prefer-ip-address: true   # ip 注册
+    instance-id: ${spring.application.name}:${server.port}  # hystrix-dashboard
+    metadata-map:
+      cluster: BASIC  # hystrix-dashboard
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 15
+
 management:
   endpoints:
     web:

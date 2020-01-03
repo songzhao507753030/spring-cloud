@@ -34,6 +34,17 @@ public class GatewayApplication {
                                                       .uri("lb://FEIGN-MASTER")).build();
     }
     
+    //  降级
+    @Bean
+    public RouteLocator rocketRoutes(RouteLocatorBuilder builder){
+        return builder.routes()
+                      .route("rocketmq-master",r -> r.path("/rocket/**")
+                                          .filters(f -> f.circuitBreaker(c -> c.setName("myCircuitBreaker")
+                                                                               .setFallbackUri("forward:/fallbackcontroller"))
+                                                         .rewritePath("/rocket/(?<segment>.*)","//$\\{segment}"))
+                                          .uri("lb://ROCKETMQ-MASTER")).build();
+    }
+    
     
     @Bean
     public KeyResolver uriKeyResolver(){

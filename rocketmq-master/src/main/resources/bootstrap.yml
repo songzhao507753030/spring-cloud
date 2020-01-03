@@ -3,12 +3,12 @@ server:
   servlet:
     context-path: /rocket
 spring:
+  application:
+    name: rocket-master
   boot:
     admin:
       client:
          url: http://songzhao:3000  # springboot-admin 服务地址
-  application:
-    name: rocket-master
   cloud:
     loadbalancer:
       ribbon:
@@ -27,7 +27,7 @@ spring:
     password: 123456
 
   datasource:
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/master?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
     password:
     type: com.zaxxer.hikari.HikariDataSource
@@ -45,7 +45,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://user:user@songzhao/eurekaServerMaster/eureka/
+      defaultZone: http://user:user@songzhao/eureka/
     refresh:
       enable: false  # 禁止客户端刷新.因为刷新同时客户端会取消注册,短暂失联。
     healthcheck:

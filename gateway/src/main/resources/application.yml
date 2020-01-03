@@ -3,7 +3,7 @@ server:
 spring:
   application:
     name: gateway
-  redis:
+  redis:   # 限流
     host: 47.92.123.114
     port: 9736
     database: 1
@@ -31,6 +31,20 @@ spring:
 #              args:
 #                status: 401
       routes:
+        - id: rocketmq-master
+          url: lb://ROCKETMQ-MASTER
+          predicates:
+            - Path= /rocket/**
+          filters:
+            - RewritePath=/rocket/(?<segment>.*),/$\{segment}
+            # - PrefixPath=/mypath 给所有的路径新增前缀。
+            # - AddRequestParameter=red,blue  这将为所有匹配的请求在下游请求的查询字符串中添加red=blue。
+            - name: RequestRateLimiter    # 限流名称
+              args:
+                key-resolver: '#{@uriKeyResolver}'    # redis实现需要key - value
+                redis-rate-limiter.replenishRate: 1   # 一秒往桶里加一个令牌
+                redis-rate-limiter.burstCapacity: 2   # 最大的令牌数是2    需要定义规则怎么去拿令牌。 启动类中 ->
+                maxSize: 5000000   # 请求大小大于允许的限制。请求大小为6.0 MB，允许的限制为5.0 MB
         - id: user # 服务名(保证该不重复可以随便写)。
           #uri: http://songzhao:9000/,http://songzhao:9100/   # 绑定访问的路径、实现负载均衡
           uri: lb://FEIGN-MASTER   # 绑定服务名实现负载均衡
@@ -55,11 +69,11 @@ spring:
                 redis-rate-limiter.replenishRate: 1   # 一秒往桶里加一个令牌
                 redis-rate-limiter.burstCapacity: 2   # 最大的令牌数是2    需要定义规则怎么去拿令牌。 启动类中 ->
                 maxSize: 5000000   # 请求大小大于允许的限制。请求大小为6.0 MB，允许的限制为5.0 MB
-#      default-filters:    # 可以选择代码编译。也可选择配置   降级和限流只可取其一。
-#        - name: Hystrix
-#          args:
-#            name: fallbackcmd
-#            fallbackUri: forward:/fallbackcontroller
+      default-filters:    # 可以选择代码编译。也可选择配置   降级和限流只可取其一。
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/fallbackcontroller
 
 
 

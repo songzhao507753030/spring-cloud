@@ -9,6 +9,22 @@ spring:
     loadbalancer:
       ribbon:
         enabled: false  #由于Ribbon负载均衡器现在处于维护模式，我们建议改用Spring Cloud LoadBalancer，它也包含在Eureka启动器中。
+  datasource:
+    url: jdbc:mysql://47.92.123.114:3306/trade?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: mysql123456
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size:  200
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: HeartHikariCP
+      max-lifetime: 18000
+      connection-timeout: 30000
+      data-source-properties:
+        prepStmtCacheSize: 250
+      leak-detection-threshold: 60000
 eureka:
   client:
     service-url:
