@@ -22,6 +22,7 @@ import java.util.Map;
  * Tool :  Intellij IDEA
  * Author : Song
  * Mail : herogmaiI@gmail.com
+ * Description:  转账、扣减金额。 实现分布式事务
  */
 @Log4j2
 @Service
@@ -67,8 +68,8 @@ public class UserServiceImpl implements UserService {
             return;
         }
         //扣减金额
-        userMapper.updateAccountBalance(account.getAccountNo(),account.getAccountNo() * -1);
+        userMapper.updateAccountBalance(account.getAccountNo(),account.getAmount() * -1);
         //添加事务日志
-        account.addTx(account.getTxNo());
+        userMapper.addTx(account.getTxNo());
     }
 }

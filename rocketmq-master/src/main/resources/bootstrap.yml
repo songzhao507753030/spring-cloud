@@ -1,14 +1,14 @@
 server:
   port: 11112
   servlet:
-    context-path: /rocket
+    context-path: /rocketMaster
 
 
 spring:
   application:
     name: rocket-master
   datasource:
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/bank1?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
     password: ''
     type: com.zaxxer.hikari.HikariDataSource
@@ -98,5 +98,5 @@ logging:
     path: F:/Logs/cloud-rocketmq
 rocketmq:
   producer:
-    group: producer_bank
+    group: producer_bank1
   name-server: 47.92.123.114:9876
